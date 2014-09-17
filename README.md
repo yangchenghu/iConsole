@@ -1,3 +1,11 @@
+##Change Log
+2014 - 09 - 17
+
++ Use `runtime` add some additional methods
++ Not enable, in `Distribute` environment
++ Close some warnings
+
+
 Purpose
 --------------
 

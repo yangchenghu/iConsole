@@ -110,7 +110,6 @@ iConsoleLogLevel;
 
 @end
 
-
 @interface iConsoleWindow : UIWindow
 
 @end

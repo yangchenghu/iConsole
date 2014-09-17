@@ -109,10 +109,10 @@ void exceptionHandler(NSException *exception)
 - (void)setConsoleText
 {
 	NSString *text = _infoString;
-	int touches = (TARGET_IPHONE_SIMULATOR ? _simulatorTouchesToShow: _deviceTouchesToShow);
+	NSInteger touches = (TARGET_IPHONE_SIMULATOR ? _simulatorTouchesToShow: _deviceTouchesToShow);
 	if (touches > 0 && touches < 11)
 	{
-		text = [text stringByAppendingFormat:@"\nSwipe down with %i finger%@ to hide console", touches, (touches != 1)? @"s": @""];
+		text = [text stringByAppendingFormat:@"\nSwipe down with %ld finger%@ to hide console", (long)touches, (touches != 1)? @"s": @""];
 	}
 	else if (TARGET_IPHONE_SIMULATOR ? _simulatorShakeToShow: _deviceShakeToShow)
 	{
@@ -173,7 +173,7 @@ void exceptionHandler(NSException *exception)
 - (CGAffineTransform)viewTransform
 {
 	CGFloat angle = 0;
-	switch ([UIApplication sharedApplication].statusBarOrientation)
+	switch ((NSInteger)[UIApplication sharedApplication].statusBarOrientation)
     {
         case UIInterfaceOrientationPortrait:
             angle = 0;
@@ -199,7 +199,7 @@ void exceptionHandler(NSException *exception)
 - (CGRect)offscreenFrame
 {
 	CGRect frame = [self onscreenFrame];
-	switch ([UIApplication sharedApplication].statusBarOrientation)
+	switch ((NSInteger)[UIApplication sharedApplication].statusBarOrientation)
     {
 		case UIInterfaceOrientationPortrait:
 			frame.origin.y = frame.size.height;
@@ -285,7 +285,7 @@ void exceptionHandler(NSException *exception)
 {
 	CGRect frame = [[notification.userInfo valueForKey:UIApplicationStatusBarFrameUserInfoKey] CGRectValue];
 	CGRect bounds = [UIScreen mainScreen].bounds;
-	switch ([UIApplication sharedApplication].statusBarOrientation)
+	switch ((NSInteger)[UIApplication sharedApplication].statusBarOrientation)
     {
 		case UIInterfaceOrientationPortrait:
 			bounds.origin.y += frame.size.height;
@@ -321,7 +321,7 @@ void exceptionHandler(NSException *exception)
 	[UIView setAnimationCurve:curve];
 	
 	CGRect bounds = [self onscreenFrame];
-	switch ([UIApplication sharedApplication].statusBarOrientation)
+	switch ((NSInteger)[UIApplication sharedApplication].statusBarOrientation)
     {
 		case UIInterfaceOrientationPortrait:
 			bounds.size.height -= frame.size.height;
@@ -673,6 +673,8 @@ void exceptionHandler(NSException *exception)
 
 - (void)sendEvent:(UIEvent *)event
 {
+#ifdef DEBUG
+    
 	if ([iConsole sharedConsole].enabled && event.type == UIEventTypeTouches)
 	{
 		NSSet *touches = [event allTouches];
@@ -703,7 +705,7 @@ void exceptionHandler(NSException *exception)
 				}
 			}
 			
-			switch ([UIApplication sharedApplication].statusBarOrientation)
+			switch ((NSInteger)[UIApplication sharedApplication].statusBarOrientation)
             {
 				case UIInterfaceOrientationPortrait:
                 {
@@ -756,11 +758,15 @@ void exceptionHandler(NSException *exception)
 			}
 		}
 	}
+#endif
+    
 	return [super sendEvent:event];
 }
 
-- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
-	
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+#ifdef DEBUG
+    
     if ([iConsole sharedConsole].enabled &&
         (TARGET_IPHONE_SIMULATOR ? [iConsole sharedConsole].simulatorShakeToShow: [iConsole sharedConsole].deviceShakeToShow))
     {
@@ -776,6 +782,8 @@ void exceptionHandler(NSException *exception)
             }
         }
 	}
+#endif
+    
 	[super motionEnded:motion withEvent:event];
 }
 
