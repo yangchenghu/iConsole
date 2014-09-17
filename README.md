@@ -5,6 +5,10 @@
 + Not enable, in `Distribute` environment
 + Close some warnings
 
+###How to use
+
+	pod "iConsole",:git=>"https://github.com/yangchenghu/iConsole.git"
+
 
 Purpose
 --------------
